@@ -312,6 +312,8 @@ using Lambda;
 	{
 #if sys
 		Sys.stderr().writeString(s + "\n");
+#elseif nodejs
+		js.Node.process.stderr.write(s + "\n");
 #else
 		haxe.Log.trace(s,null);
 #end
@@ -319,7 +321,7 @@ using Lambda;
 
 	private function println(s:String)
 	{
-#if sys
+#if (sys || nodejs)
 		Sys.println(s);
 #else
 		haxe.Log.trace(s,null);
@@ -391,7 +393,7 @@ using Lambda;
 						errln('ERROR: Too many arguments');
 				}
 				println(v.showUsage());
-#if sys
+#if (sys || nodejs)
 				Sys.exit(1);
 #end
 			}
