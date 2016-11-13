@@ -308,12 +308,27 @@ using Lambda;
 		this.depth = 0;
 	}
 
+#if nodejs
+	var colors:Dynamic = null;
+	var checkedColors:Bool = false;
+#end
+
 	private function errln(s:String)
 	{
 #if sys
 		Sys.stderr().writeString(s + "\n");
 #elseif nodejs
-		js.Node.process.stderr.write(s + "\n");
+		if (!checkedColors) {
+			try {
+				colors = js.Node.require('colors/safe');
+			} catch (e:Dynamic) {}
+			checkedColors = true;
+		}
+		if (colors != null) {
+			js.Node.process.stderr.write(colors.red(s) + "\n");
+		} else {
+			js.Node.process.stderr.write(s + "\n");
+		}
 #else
 		haxe.Log.trace(s,null);
 #end
