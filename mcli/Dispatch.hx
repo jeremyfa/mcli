@@ -319,9 +319,11 @@ using Lambda;
 		Sys.stderr().writeString(s + "\n");
 #elseif nodejs
 		if (!checkedColors) {
-			try {
-				colors = js.Node.require('colors/safe');
-			} catch (e:Dynamic) {}
+			if (Sys.args().indexOf('--no-colors') != -1) {
+				try {
+					colors = js.Node.require('colors/safe');
+				} catch (e:Dynamic) {}
+			}
 			checkedColors = true;
 		}
 		if (colors != null) {
